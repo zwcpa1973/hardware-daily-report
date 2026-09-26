@@ -117,14 +117,22 @@ def git_push() -> tuple[bool, str]:
         return subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
                               encoding="utf-8", errors="replace")
 
-    run("git", "add", "-A")
-    diff = run("git", "diff", "--cached", "--quiet")
-    if diff.returncode == 0:
-        return True, "无变更，跳过提交"
-    run("git", "commit", "-m", f"日报更新 {today()}")
+    def commit_if_any() -> None:
+        run("git", "add", "-A")
+        if run("git", "diff", "--cached", "--quiet").returncode != 0:
+            run("git", "commit", "-m", f"日报更新 {today()}")
+
+    commit_if_any()
     push = run("git", "push")
+    if push.returncode != 0 and "rejected" in (push.stdout + push.stderr):
+        # 远端有新提交（多为 Actions 重建），rebase 后再推
+        pull = run("git", "pull", "--rebase", "--autostash")
+        if pull.returncode != 0:
+            return False, f"拉取远端失败：{(pull.stdout + pull.stderr).strip()[:300]}"
+        commit_if_any()
+        push = run("git", "push")
     if push.returncode != 0:
-        return False, f"推送失败：{push.stderr.strip()[:300]}"
+        return False, f"推送失败：{(push.stderr or push.stdout).strip()[:300]}"
     return True, "已提交并推送 GitHub"
 
 
