@@ -1,0 +1,182 @@
+# 硬件日报监控清单
+# fields:
+#   id            唯一编号
+#   group         图表分组: machines(整机) / ddr5(内存) / neo(手机)
+#   form          形态: 迷你主机 / 笔记本 / 台式机 / 内存 / 手机
+#   brand / chip  品牌与平台（AMD / Intel / Apple / 其他）
+#   model         展示名称
+#   keyword       搜索关键词（京东与淘宝共用）
+#   must_include  标题必须包含的词（命中才算同一商品）
+#   exclude       标题包含即排除（如 二手 / 翻新）
+#   price_range   价格合理区间 [最低, 最高]，防串到别的商品
+#   taobao        是否同时在淘宝抓取（默认 true）
+
+items:
+  # ---------- 迷你主机 ----------
+  - id: mac_mini_m4_512
+    group: machines
+    form: 迷你主机
+    brand: Apple
+    chip: Apple M4
+    model: Mac mini M4 16G+512G
+    keyword: "Mac mini M4 16G 512G"
+    must_include: ["Mac mini"]
+    price_range: [3500, 12000]
+
+  - id: beelink_ser9
+    group: machines
+    form: 迷你主机
+    brand: 零刻
+    chip: AMD 锐龙
+    model: 零刻 SER9 迷你主机
+    keyword: "零刻 SER9"
+    must_include: ["零刻", "SER9"]
+    price_range: [2500, 9999]
+
+  - id: gmktec_k8_plus
+    group: machines
+    form: 迷你主机
+    brand: 极摩客
+    chip: AMD 锐龙
+    model: 极摩客 K8 Plus 迷你主机
+    keyword: "极摩客 K8 Plus"
+    must_include: ["极摩客"]
+    price_range: [2000, 8000]
+
+  - id: minisforum_nuc5
+    group: machines
+    form: 迷你主机
+    brand: 铭凡
+    chip: Intel 酷睿 Ultra
+    model: 铭凡 NUC5 迷你主机
+    keyword: "铭凡 NUC5"
+    must_include: ["铭凡"]
+    price_range: [2500, 9999]
+
+  # ---------- 笔记本 ----------
+  - id: macbook_air_m4
+    group: machines
+    form: 笔记本
+    brand: Apple
+    chip: Apple M4
+    model: MacBook Air 13 M4 16G+256G
+    keyword: "MacBook Air M4 16G 256G"
+    must_include: ["MacBook Air"]
+    price_range: [6000, 13000]
+
+  - id: legion_y7000p
+    group: machines
+    form: 笔记本
+    brand: 联想
+    chip: Intel 酷睿
+    model: 拯救者 Y7000P 游戏本
+    keyword: "拯救者 Y7000P"
+    must_include: ["拯救者", "Y7000P"]
+    price_range: [6500, 13000]
+
+  - id: asus_tianxuan_pro
+    group: machines
+    form: 笔记本
+    brand: 华硕
+    chip: AMD 锐龙
+    model: 华硕天选 Pro 锐龙版
+    keyword: "华硕天选 Pro 锐龙版"
+    must_include: ["天选"]
+    exclude: ["二手"]
+    price_range: [5500, 12000]
+
+  # ---------- 台式机 ----------
+  - id: legion_blade_7000k
+    group: machines
+    form: 台式机
+    brand: 联想
+    chip: Intel 酷睿
+    model: 拯救者刃 7000K 主机
+    keyword: "拯救者 刃7000K"
+    must_include: ["刃7000K"]
+    price_range: [6000, 16000]
+
+  - id: asus_tianxuan_x
+    group: machines
+    form: 台式机
+    brand: 华硕
+    chip: AMD 锐龙
+    model: 华硕天选X 台式机
+    keyword: "华硕天选X 台式机"
+    must_include: ["天选X"]
+    price_range: [4000, 11000]
+
+  - id: lenovo_geekpro
+    group: machines
+    form: 台式机
+    brand: 联想
+    chip: Intel 酷睿
+    model: 联想 GeekPro 台式机
+    keyword: "联想 GeekPro 台式机"
+    must_include: ["GeekPro"]
+    price_range: [4000, 11000]
+
+  # ---------- DDR5 内存 ----------
+  - id: kingbank_ddr5_6000_16x2
+    group: ddr5
+    form: 内存
+    brand: 金百达
+    chip: DDR5
+    model: 金百达 DDR5 6000 16G×2
+    keyword: "金百达 DDR5 6000 16G*2"
+    must_include: ["金百达"]
+    price_range: [300, 2500]
+
+  - id: gloway_ddr5_6000_16x2
+    group: ddr5
+    form: 内存
+    brand: 光威
+    chip: DDR5
+    model: 光威 DDR5 6000 16G×2
+    keyword: "光威 DDR5 6000 16G*2"
+    must_include: ["光威"]
+    price_range: [300, 2000]
+
+  - id: kingston_ddr5_6000_16x2
+    group: ddr5
+    form: 内存
+    brand: 金士顿
+    chip: DDR5
+    model: 金士顿 Fury DDR5 6000 16G×2
+    keyword: "金士顿 DDR5 6000 16G*2"
+    must_include: ["金士顿"]
+    price_range: [400, 2500]
+
+  # ---------- iQOO Neo 手机 ----------
+  - id: iqoo_neo10
+    group: neo
+    form: 手机
+    brand: iQOO
+    chip: 骁龙8 Gen3
+    model: iQOO Neo10 12+256
+    keyword: "iQOO Neo10 12+256"
+    must_include: ["Neo10"]
+    exclude: ["Pro", "二手", "翻新"]
+    price_range: [1500, 3500]
+
+  - id: iqoo_neo10_pro
+    group: neo
+    form: 手机
+    brand: iQOO
+    chip: 天玑9400
+    model: iQOO Neo10 Pro 12+256
+    keyword: "iQOO Neo10 Pro 12+256"
+    must_include: ["Neo10 Pro"]
+    exclude: ["Pro+", "二手", "翻新"]
+    price_range: [1800, 4000]
+
+  - id: iqoo_neo11
+    group: neo
+    form: 手机
+    brand: iQOO
+    chip: 骁龙8 至尊版
+    model: iQOO Neo11 12+256
+    keyword: "iQOO Neo11 12+256"
+    must_include: ["Neo11"]
+    exclude: ["Pro", "二手", "翻新"]
+    price_range: [1800, 4200]

@@ -1,0 +1,4 @@
+playwright>=1.40
+matplotlib>=3.8
+pandas>=2.0
+PyYAML>=6.0

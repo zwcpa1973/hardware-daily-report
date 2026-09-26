@@ -1,0 +1,8 @@
+# 本地隐私文件（切勿提交）
+.env
+auth/
+output/debug/
+output/daily_log.txt
+__pycache__/
+*.pyc
+.venv/
