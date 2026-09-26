@@ -3,6 +3,10 @@
 每日自动采集 **京东 / 淘宝** 的硬件报价并生成走势图，每天 **17:00** 发送到邮箱，
 同时归档到本仓库（走势图 + 历史日报 + GitHub Pages）。
 
+- **在线阅读**：<https://zwcpa1973.github.io/hardware-daily-report/>
+- **仓库**：<https://github.com/zwcpa1973/hardware-daily-report>
+- 注意：本机需使用 Python 3.10（`py -3.10`），playwright 暂不支持 3.14
+
 ## 监控范围
 
 | 分组 | 商品（持续积累走势） |
@@ -37,11 +41,11 @@ Windows 计划任务 17:00
 ```bat
 cd /d W:\codexplaceoffice\其他\硬件日报
 
-:: 1. 安装依赖（仅首次）
-pip install -r requirements.txt
+:: 1. 安装依赖（仅首次，需 Python 3.10）
+py -3.10 -m pip install -r requirements.txt
 
 :: 2. 扫码登录京东（必选）与淘宝（可选），登录态存于 auth/，约 1 个月失效后重新执行
-python scripts/login.py
+py -3.10 scripts\login.py
 
 :: 3. .env 填入 QQ 邮箱授权码（QQ邮箱网页版 -> 设置 -> 账号 -> 开启SMTP -> 生成授权码）
 ::    然后手动跑一次，验证全链路
@@ -52,24 +56,24 @@ run_daily.bat
 
 ## 计划任务
 
-已通过 PowerShell 注册（`Register-ScheduledTask`）：
+已通过 PowerShell 注册（任务定义文件 `task_hardware_daily.xml`）：
 
-- 名称：`硬件日报`
-- 触发：每天 17:00（错过则登录后尽快补跑）
-- 动作：`W:\codexplaceoffice\其他\硬件日报\run_daily.bat`
+- 名称：`HardwareDaily`
+- 触发：每天 17:00（`StartWhenAvailable`，错过开机则登录后尽快补跑）
+- 动作：`W:\codexplaceoffice\其他\硬件日报\run_daily.bat`（`pushd` 兼容网络盘路径）
 - 日志：`output/daily_log.txt`
 
-管理命令（管理员 PowerShell）：
+管理命令（PowerShell）：
 
 ```powershell
-Get-ScheduledTask -TaskName '硬件日报'          # 查看
-Start-ScheduledTask  -TaskName '硬件日报'        # 立即执行
-Unregister-ScheduledTask -TaskName '硬件日报'    # 删除
+Get-ScheduledTask -TaskName 'HardwareDaily'          # 查看
+Start-ScheduledTask  -TaskName 'HardwareDaily'       # 立即执行
+Unregister-ScheduledTask -TaskName 'HardwareDaily'   # 删除
 ```
 
 ## 维护
 
-- **登录态过期**：邮件会提示"京东/淘宝登录态已失效"，重新运行 `python scripts/login.py`。
+- **登录态过期**：邮件会提示"京东/淘宝登录态已失效"，重新运行 `py -3.10 scripts\login.py`。
 - **某商品总是未命中**：查看 `output/debug/` 下当日截图与 HTML，调整 `products.yaml`
   里的 `keyword / must_include / price_range`。
 - **授权码更换**：更新 `.env` 的 `SMTP_AUTH_CODE`（`.env` 已被 gitignore，不会提交）。
