@@ -87,4 +87,15 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
+### 最新数据
+
+暂无数据。请先运行 `python scripts/login.py` 完成登录，再运行 `run_daily.bat` 开始采集。
+图表占位：`output/charts/`（首次采集后自动生成）
+### 走势图
+
+![整机](output/charts/chart_machines.png)
+
+![DDR5](output/charts/chart_ddr5.png)
+
+![Neo](output/charts/chart_neo.png)
 <!-- AUTO:END -->
