@@ -49,9 +49,10 @@ items:
     form: 迷你主机
     brand: 铭凡
     chip: Intel 酷睿 Ultra
-    model: 铭凡 NUC5 迷你主机
-    keyword: "铭凡 NUC5"
+    model: 铭凡 NUC 迷你主机
+    keyword: "铭凡 NUC"
     must_include: ["铭凡"]
+    exclude: ["准系统"]
     price_range: [2500, 9999]
 
   # ---------- 笔记本 ----------

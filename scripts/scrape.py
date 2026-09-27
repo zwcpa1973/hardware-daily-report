@@ -143,7 +143,11 @@ def dump_debug(page, tag: str) -> None:
 
 
 def search_jd(context, keyword: str, item_id: str) -> list[dict]:
-    """京东：PC 搜索优先，失败再试手机版搜索。"""
+    """京东：PC 搜索优先，失败再试手机版搜索。
+
+    注意：手机版搜索的登录墙只影响本条商品，不能据此判定整个京东会话失效
+    （PC 搜索在同一会话下通常仍可用）。
+    """
     page = context.new_page()
     try:
         kw = _urlencode(keyword)
@@ -153,18 +157,21 @@ def search_jd(context, keyword: str, item_id: str) -> list[dict]:
         check_login_wall(page, "jd")
         gentle_scroll(page)
         cands = page.evaluate(JS_JD_PC)
+        if not cands:
+            dump_debug(page, f"jd_empty_{item_id}")
         if cands:
             return cands
-        # 回退：手机版搜索
+        # 回退：手机版搜索（撞登录墙时仅跳过本条）
         log(f"    京东PC搜索无结果，尝试手机版搜索")
         page.goto(f"https://so.m.jd.com/ware/search.action?keyword={kw}",
                   wait_until="domcontentloaded", timeout=30000)
         page.wait_for_timeout(2500)
-        check_login_wall(page, "jd")
+        url = page.url or ""
+        if "passport.jd.com" in url or "plogin.m.jd.com" in url:
+            log("    手机版搜索需登录，本条跳过")
+            return []
         gentle_scroll(page, times=4)
         return page.evaluate(JS_GENERIC_MOBILE)
-    except SessionExpired:
-        raise
     except Exception as exc:
         dump_debug(page, f"jd_{item_id}")
         log(f"    京东搜索异常：{exc}")
