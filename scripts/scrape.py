@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import re
 import sys
 import time
@@ -109,6 +110,10 @@ class SessionExpired(Exception):
     pass
 
 
+class RateLimited(Exception):
+    pass
+
+
 def log(msg: str) -> None:
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
 
@@ -159,6 +164,15 @@ def search_jd(context, keyword: str, item_id: str) -> list[dict]:
         cands = page.evaluate(JS_JD_PC)
         if not cands:
             dump_debug(page, f"jd_empty_{item_id}")
+            body = ""
+            try:
+                body = page.inner_text("body")[:3000]
+            except Exception:
+                pass
+            if "访问频繁" in body or "无法搜索" in body:
+                raise RateLimited("京东搜索频控：访问频繁")
+            if "京东验证" in body or "快速验证" in body:
+                raise RateLimited("京东弹出人工安全验证（需在浏览器中手动通过滑块）")
         if cands:
             return cands
         # 回退：手机版搜索（撞登录墙时仅跳过本条）
@@ -305,6 +319,24 @@ def main() -> int:
                         else:
                             log(f"    京东未命中（候选 {len(cands)} 条）")
                             status["results"][iid]["jd"] = None
+                    except RateLimited:
+                        log("    !! 命中京东频控，等待 100 秒后重试一次……")
+                        time.sleep(100)
+                        try:
+                            cands = search_jd(jd_ctx, item["keyword"], iid)
+                            best = pick_candidate(cands, item)
+                            if best:
+                                log(f"    京东 ¥{best['price']:.0f}  {best['title'][:40]}")
+                                rows.append(_row(item, "京东", best))
+                                status["results"][iid]["jd"] = best["price"]
+                            else:
+                                log(f"    重试仍未命中（候选 {len(cands)} 条）")
+                                status["results"][iid]["jd"] = None
+                        except RateLimited:
+                            log("    !! 仍被频控/需人工验证，今日京东剩余商品全部跳过")
+                            status["jd"] = "rate_limited"
+                            status["results"][iid]["jd"] = None
+                            jd_dead = True
                     except SessionExpired as exc:
                         log(f"    !! {exc}，今日京东后续跳过")
                         status["jd"] = "expired"
@@ -327,6 +359,10 @@ def main() -> int:
                         status["taobao"] = "expired"
                         tb_dead = True
                         status["results"][iid]["taobao"] = None
+
+                # 商品之间随机间隔，避免触发京东搜索频控
+                if idx < len(items) and not (jd_dead and tb_dead):
+                    time.sleep(random.uniform(8, 15))
 
             if jd_ctx and status.get("jd") != "expired":
                 status["jd"] = "ok" if any(
