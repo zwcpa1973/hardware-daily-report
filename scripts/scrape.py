@@ -194,8 +194,46 @@ def search_jd(page, keyword: str, item_id: str) -> list[dict]:
         return []
 
 
-def search_taobao(context, keyword: str, item_id: str) -> list[dict]:
-    page = context.new_page()
+JS_TAOBAO_PC = r"""
+() => {
+  const out = [];
+  const seen = new Set();
+  const anchors = document.querySelectorAll(
+    'a[href*="item.taobao.com"], a[href*="detail.tmall.com"], a[href*="chaoshi.detail.tmall.com"]');
+  anchors.forEach(a => {
+    const card = a.closest('div[class*="Card"], div[class*="card"], div[class*="Content"], li, section') || a.parentElement;
+    if (!card) return;
+    const txt = (card.textContent || '').replace(/\s+/g, ' ');
+    const m = txt.match(/¥\s*([0-9][0-9,]*\.?[0-9]*)/);
+    if (!m) return;
+    const price = parseFloat(m[1].replace(/,/g, ''));
+    if (!isFinite(price) || price <= 0) return;
+    let title = (a.getAttribute('aria-label') || a.title || a.textContent || '').replace(/\s+/g, ' ').trim();
+    if (title.length < 8) {
+      const tEl = card.querySelector('[class*="title" i], [class*="Title" i]');
+      title = tEl ? (tEl.textContent || '').replace(/\s+/g, ' ').trim() : title;
+    }
+    if (!title || title.length < 8) return;
+    const key = title.slice(0, 60) + '|' + price;
+    if (seen.has(key)) return;
+    seen.add(key);
+    const idm = (a.href || '').match(/id=(\d+)/);
+    const url = idm ? 'https://item.taobao.com/item.htm?id=' + idm[1] : a.href;
+    out.push({
+      title: title.slice(0, 200),
+      price: price,
+      url: url,
+      shop: '',
+      self_op: /天猫|官方|旗舰店/.test(txt),
+    });
+  });
+  return out.slice(0, 40);
+}
+"""
+
+
+def search_taobao(page, keyword: str, item_id: str) -> list[dict]:
+    """淘宝 PC 搜索（page 为原生浏览器中的复用页面）。"""
     try:
         kw = _urlencode(keyword)
         page.goto(f"https://s.taobao.com/search?q={kw}",
@@ -203,15 +241,23 @@ def search_taobao(context, keyword: str, item_id: str) -> list[dict]:
         page.wait_for_timeout(3500)
         check_login_wall(page, "taobao")
         gentle_scroll(page, times=4)
-        return page.evaluate(JS_GENERIC_MOBILE)
-    except SessionExpired:
+        cands = page.evaluate(JS_TAOBAO_PC)
+        if not cands:
+            dump_debug(page, f"tb_empty_{item_id}")
+            body = ""
+            try:
+                body = page.inner_text("body")[:3000]
+            except Exception:
+                pass
+            if any(k in body for k in ("访问受限", "亲，太抱歉", "验证码", "安全验证")):
+                raise RateLimited("淘宝风控拦截（需人工验证）")
+        return cands
+    except (RateLimited, SessionExpired):
         raise
     except Exception as exc:
         dump_debug(page, f"tb_{item_id}")
         log(f"    淘宝搜索异常：{exc}")
         return []
-    finally:
-        page.close()
 
 
 def _urlencode(s: str) -> str:
@@ -254,22 +300,23 @@ def make_context(browser, state_path: Path, mobile: bool = False):
 
 
 JD_PROFILE = AUTH_DIR / "edge_profile_jd"
+TB_PROFILE = AUTH_DIR / "edge_profile_taobao"
 
 
-def start_jd_native(pw):
-    """原生启动 Edge（京东登录档案），返回 (proc, ctx)；失败返回 (proc, None)。
+def start_native(pw, profile: Path):
+    """原生启动 Edge（指定登录档案），返回 (proc, ctx)；失败返回 (proc, None)。
 
-    京东风控会拦截"无头/自动化浏览器"的搜索（即使携带有效登录 Cookie），
-    但对真实 Edge 窗口放行，因此抓取必须在原生浏览器中进行，Python 仅通过
-    CDP 读取页面数据。
+    京东/淘宝的风控都会拦截"无头/自动化浏览器"的搜索（即使携带有效登录
+    Cookie），但对真实 Edge 窗口放行，因此抓取必须在原生浏览器中进行，
+    Python 仅通过 CDP 读取页面数据。
     """
     from login import find_browser, free_port, kill_stale_edge
 
     exe = find_browser()
-    kill_stale_edge(JD_PROFILE)
+    kill_stale_edge(profile)
     port = free_port()
     proc = subprocess.Popen(
-        [exe, f"--user-data-dir={JD_PROFILE}", f"--remote-debugging-port={port}",
+        [exe, f"--user-data-dir={profile}", f"--remote-debugging-port={port}",
          "--no-first-run", "--no-default-browser-check",
          "--disable-blink-features=AutomationControlled",
          "--window-size=1280,860", "about:blank"],
@@ -306,10 +353,8 @@ def main() -> int:
         with sync_playwright() as pw:
             jd_ok = args.platform in ("jd", "all")
             tb_ok = args.platform in ("taobao", "all")
-            jd_proc = None
-            jd_page = None
-            tb_ctx = None
-            browser = None
+            jd_proc = tb_proc = None
+            jd_page = tb_page = None
 
             if jd_ok:
                 # 京东抓取在原生 Edge（登录档案）中进行——无头自动化会被风控拦截
@@ -318,7 +363,7 @@ def main() -> int:
                     status["jd"] = "missing_login"
                     jd_ok = False
                 else:
-                    jd_proc, jd_ctx = start_jd_native(pw)
+                    jd_proc, jd_ctx = start_native(pw, JD_PROFILE)
                     if jd_ctx is None:
                         log("!! 京东浏览器启动/连接失败")
                         status["jd"] = "start_failed"
@@ -326,18 +371,18 @@ def main() -> int:
                     else:
                         jd_page = jd_ctx.pages[0] if jd_ctx.pages else jd_ctx.new_page()
             if tb_ok:
-                if not (AUTH_DIR / "taobao_state.json").exists():
-                    log("!! 未找到淘宝登录态（auth/taobao_state.json），淘宝今日跳过（可选）")
+                if not TB_PROFILE.exists():
+                    log("!! 未找到淘宝登录档案（auth/edge_profile_taobao），请先运行 python scripts/login.py taobao")
                     status["taobao"] = "missing_login"
                     tb_ok = False
                 else:
-                    try:
-                        browser = pw.chromium.launch(
-                            channel="msedge", headless=True,
-                            args=["--disable-blink-features=AutomationControlled"])
-                    except Exception:
-                        browser = pw.chromium.launch(headless=True)
-                    tb_ctx = make_context(browser, AUTH_DIR / "taobao_state.json")
+                    tb_proc, tb_ctx = start_native(pw, TB_PROFILE)
+                    if tb_ctx is None:
+                        log("!! 淘宝浏览器启动/连接失败")
+                        status["taobao"] = "start_failed"
+                        tb_ok = False
+                    else:
+                        tb_page = tb_ctx.pages[0] if tb_ctx.pages else tb_ctx.new_page()
 
             jd_dead = tb_dead = False
 
@@ -381,9 +426,9 @@ def main() -> int:
                         jd_dead = True
                         status["results"][iid]["jd"] = None
 
-                if tb_ok and not tb_dead and tb_ctx:
+                if tb_ok and not tb_dead and tb_page:
                     try:
-                        cands = search_taobao(tb_ctx, item["keyword"], iid)
+                        cands = search_taobao(tb_page, item["keyword"], iid)
                         best = pick_candidate(cands, item)
                         if best:
                             log(f"    淘宝 ¥{best['price']:.0f}  {best['title'][:40]}")
@@ -392,6 +437,24 @@ def main() -> int:
                         else:
                             log(f"    淘宝未命中（候选 {len(cands)} 条）")
                             status["results"][iid]["taobao"] = None
+                    except RateLimited:
+                        log("    !! 命中淘宝风控，等待 100 秒后重试一次……")
+                        time.sleep(100)
+                        try:
+                            cands = search_taobao(tb_page, item["keyword"], iid)
+                            best = pick_candidate(cands, item)
+                            if best:
+                                log(f"    淘宝 ¥{best['price']:.0f}  {best['title'][:40]}")
+                                rows.append(_row(item, "淘宝", best))
+                                status["results"][iid]["taobao"] = best["price"]
+                            else:
+                                log(f"    重试仍未命中（候选 {len(cands)} 条）")
+                                status["results"][iid]["taobao"] = None
+                        except RateLimited:
+                            log("    !! 仍被淘宝风控拦截，今日淘宝剩余商品全部跳过")
+                            status["taobao"] = "rate_limited"
+                            status["results"][iid]["taobao"] = None
+                            tb_dead = True
                     except SessionExpired as exc:
                         log(f"    !! {exc}，今日淘宝后续跳过")
                         status["taobao"] = "expired"
@@ -406,18 +469,17 @@ def main() -> int:
                 status["jd"] = "ok" if any(
                     v.get("jd") for v in status["results"].values()
                 ) else "no_hits"
-            if tb_ctx and status.get("taobao") != "expired":
+            if tb_page and status.get("taobao") not in ("expired", "rate_limited"):
                 status["taobao"] = "ok" if any(
                     v.get("taobao") for v in status["results"].values()
                 ) else "no_hits"
-            if jd_proc:
+            if jd_proc or tb_proc:
                 # 关闭原生浏览器（kill_stale_edge 按档案名定向清理）
                 from login import kill_stale_edge
-                kill_stale_edge(JD_PROFILE)
-            if tb_ctx:
-                tb_ctx.close()
-            if browser:
-                browser.close()
+                if jd_proc:
+                    kill_stale_edge(JD_PROFILE)
+                if tb_proc:
+                    kill_stale_edge(TB_PROFILE)
     except Exception as exc:
         status["fatal"] = str(exc)
         log(f"!! 抓取流程异常：{exc}")
