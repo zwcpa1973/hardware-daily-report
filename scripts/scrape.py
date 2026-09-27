@@ -15,6 +15,7 @@ import argparse
 import json
 import random
 import re
+import subprocess
 import sys
 import time
 from datetime import datetime
@@ -147,13 +148,12 @@ def dump_debug(page, tag: str) -> None:
         pass
 
 
-def search_jd(context, keyword: str, item_id: str) -> list[dict]:
-    """京东：PC 搜索优先，失败再试手机版搜索。
+def search_jd(page, keyword: str, item_id: str) -> list[dict]:
+    """京东：PC 搜索优先，失败再试手机版搜索（page 为原生浏览器中的复用页面）。
 
     注意：手机版搜索的登录墙只影响本条商品，不能据此判定整个京东会话失效
     （PC 搜索在同一会话下通常仍可用）。
     """
-    page = context.new_page()
     try:
         kw = _urlencode(keyword)
         page.goto(f"https://search.jd.com/Search?keyword={kw}&enc=utf-8",
@@ -192,8 +192,6 @@ def search_jd(context, keyword: str, item_id: str) -> list[dict]:
         dump_debug(page, f"jd_{item_id}")
         log(f"    京东搜索异常：{exc}")
         return []
-    finally:
-        page.close()
 
 
 def search_taobao(context, keyword: str, item_id: str) -> list[dict]:
@@ -255,6 +253,38 @@ def make_context(browser, state_path: Path, mobile: bool = False):
     return browser.new_context(**kwargs)
 
 
+JD_PROFILE = AUTH_DIR / "edge_profile_jd"
+
+
+def start_jd_native(pw):
+    """原生启动 Edge（京东登录档案），返回 (proc, ctx)；失败返回 (proc, None)。
+
+    京东风控会拦截"无头/自动化浏览器"的搜索（即使携带有效登录 Cookie），
+    但对真实 Edge 窗口放行，因此抓取必须在原生浏览器中进行，Python 仅通过
+    CDP 读取页面数据。
+    """
+    from login import find_browser, free_port, kill_stale_edge
+
+    exe = find_browser()
+    kill_stale_edge(JD_PROFILE)
+    port = free_port()
+    proc = subprocess.Popen(
+        [exe, f"--user-data-dir={JD_PROFILE}", f"--remote-debugging-port={port}",
+         "--no-first-run", "--no-default-browser-check",
+         "--disable-blink-features=AutomationControlled",
+         "--window-size=1280,860", "about:blank"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    for _ in range(30):
+        time.sleep(1)
+        try:
+            b = pw.chromium.connect_over_cdp(f"http://127.0.0.1:{port}", timeout=3000)
+            if b.contexts:
+                return proc, b.contexts[0]
+        except Exception:
+            continue
+    return proc, None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="抓取京东/淘宝监控商品今日价格")
     parser.add_argument("--platform", choices=["jd", "taobao", "all"], default="all")
@@ -274,33 +304,39 @@ def main() -> int:
 
     try:
         with sync_playwright() as pw:
-            try:
-                browser = pw.chromium.launch(
-                    channel="msedge",
-                    headless=not args.headed,
-                    args=["--disable-blink-features=AutomationControlled"],
-                )
-            except Exception:
-                log("未找到 Edge，回退到 Playwright 自带 Chromium（如报错请执行 playwright install chromium）")
-                browser = pw.chromium.launch(headless=not args.headed)
-
             jd_ok = args.platform in ("jd", "all")
             tb_ok = args.platform in ("taobao", "all")
-            jd_ctx = tb_ctx = None
+            jd_proc = None
+            jd_page = None
+            tb_ctx = None
+            browser = None
 
             if jd_ok:
-                if not (AUTH_DIR / "jd_state.json").exists():
-                    log("!! 未找到京东登录态（auth/jd_state.json），请先运行 python scripts/login.py jd")
+                # 京东抓取在原生 Edge（登录档案）中进行——无头自动化会被风控拦截
+                if not JD_PROFILE.exists():
+                    log("!! 未找到京东登录档案（auth/edge_profile_jd），请先运行 python scripts/login.py jd")
                     status["jd"] = "missing_login"
                     jd_ok = False
                 else:
-                    jd_ctx = make_context(browser, AUTH_DIR / "jd_state.json")
+                    jd_proc, jd_ctx = start_jd_native(pw)
+                    if jd_ctx is None:
+                        log("!! 京东浏览器启动/连接失败")
+                        status["jd"] = "start_failed"
+                        jd_ok = False
+                    else:
+                        jd_page = jd_ctx.pages[0] if jd_ctx.pages else jd_ctx.new_page()
             if tb_ok:
                 if not (AUTH_DIR / "taobao_state.json").exists():
                     log("!! 未找到淘宝登录态（auth/taobao_state.json），淘宝今日跳过（可选）")
                     status["taobao"] = "missing_login"
                     tb_ok = False
                 else:
+                    try:
+                        browser = pw.chromium.launch(
+                            channel="msedge", headless=True,
+                            args=["--disable-blink-features=AutomationControlled"])
+                    except Exception:
+                        browser = pw.chromium.launch(headless=True)
                     tb_ctx = make_context(browser, AUTH_DIR / "taobao_state.json")
 
             jd_dead = tb_dead = False
@@ -310,9 +346,9 @@ def main() -> int:
                 status["results"][iid] = {}
                 log(f"({idx}/{len(items)}) {item['model']} —— {item['keyword']}")
 
-                if jd_ok and not jd_dead and jd_ctx:
+                if jd_ok and not jd_dead and jd_page:
                     try:
-                        cands = search_jd(jd_ctx, item["keyword"], iid)
+                        cands = search_jd(jd_page, item["keyword"], iid)
                         best = pick_candidate(cands, item)
                         if best:
                             log(f"    京东 ¥{best['price']:.0f}  {best['title'][:40]}")
@@ -325,7 +361,7 @@ def main() -> int:
                         log("    !! 命中京东频控，等待 100 秒后重试一次……")
                         time.sleep(100)
                         try:
-                            cands = search_jd(jd_ctx, item["keyword"], iid)
+                            cands = search_jd(jd_page, item["keyword"], iid)
                             best = pick_candidate(cands, item)
                             if best:
                                 log(f"    京东 ¥{best['price']:.0f}  {best['title'][:40]}")
@@ -366,7 +402,7 @@ def main() -> int:
                 if idx < len(items) and not (jd_dead and tb_dead):
                     time.sleep(random.uniform(20, 35))
 
-            if jd_ctx and status.get("jd") != "expired":
+            if jd_page and status.get("jd") not in ("expired", "rate_limited"):
                 status["jd"] = "ok" if any(
                     v.get("jd") for v in status["results"].values()
                 ) else "no_hits"
@@ -374,11 +410,14 @@ def main() -> int:
                 status["taobao"] = "ok" if any(
                     v.get("taobao") for v in status["results"].values()
                 ) else "no_hits"
-            if jd_ctx:
-                jd_ctx.close()
+            if jd_proc:
+                # 关闭原生浏览器（kill_stale_edge 按档案名定向清理）
+                from login import kill_stale_edge
+                kill_stale_edge(JD_PROFILE)
             if tb_ctx:
                 tb_ctx.close()
-            browser.close()
+            if browser:
+                browser.close()
     except Exception as exc:
         status["fatal"] = str(exc)
         log(f"!! 抓取流程异常：{exc}")

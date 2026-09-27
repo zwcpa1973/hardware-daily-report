@@ -3,25 +3,9 @@
   "results": {
     "mac_mini_m4_512": {
       "jd": null
-    },
-    "beelink_ser9": {},
-    "gmktec_k8_plus": {},
-    "minisforum_nuc5": {},
-    "macbook_air_m4": {},
-    "legion_y7000p": {},
-    "asus_tianxuan_pro": {},
-    "legion_blade_7000k": {},
-    "asus_tianxuan_x": {},
-    "lenovo_geekpro": {},
-    "kingbank_ddr5_6000_16x2": {},
-    "gloway_ddr5_6000_16x2": {},
-    "kingston_ddr5_6000_16x2": {},
-    "iqoo_neo10": {},
-    "iqoo_neo10_pro": {},
-    "iqoo_neo11": {}
+    }
   },
-  "taobao": "missing_login",
-  "jd": "no_hits",
-  "fetched_at": "2026-09-27 13:55:05",
+  "jd": "rate_limited",
+  "fetched_at": "2026-09-27 14:01:08",
   "rows_today": 0
 }
