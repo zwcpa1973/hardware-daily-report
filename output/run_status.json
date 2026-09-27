@@ -2,10 +2,57 @@
   "date": "2026-09-27",
   "results": {
     "mac_mini_m4_512": {
+      "jd": null,
+      "taobao": 6999
+    },
+    "beelink_ser9": {
+      "taobao": 3199
+    },
+    "gmktec_k8_plus": {
+      "taobao": 2249
+    },
+    "minisforum_nuc5": {
+      "taobao": 2598.7
+    },
+    "macbook_air_m4": {
       "taobao": null
+    },
+    "legion_y7000p": {
+      "taobao": 6588
+    },
+    "asus_tianxuan_pro": {
+      "taobao": 10763
+    },
+    "legion_blade_7000k": {
+      "taobao": 11299
+    },
+    "asus_tianxuan_x": {
+      "taobao": 5899
+    },
+    "lenovo_geekpro": {
+      "taobao": 4199
+    },
+    "kingbank_ddr5_6000_16x2": {
+      "taobao": 1675
+    },
+    "gloway_ddr5_6000_16x2": {
+      "taobao": 1199
+    },
+    "kingston_ddr5_6000_16x2": {
+      "taobao": 1286.1
+    },
+    "iqoo_neo10": {
+      "taobao": 1805
+    },
+    "iqoo_neo10_pro": {
+      "taobao": 2316
+    },
+    "iqoo_neo11": {
+      "taobao": 2643
     }
   },
-  "taobao": "no_hits",
-  "fetched_at": "2026-09-27 17:23:07",
-  "rows_today": 0
+  "jd": "rate_limited",
+  "taobao": "ok",
+  "fetched_at": "2026-09-27 17:37:09",
+  "rows_today": 15
 }
