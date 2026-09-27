@@ -113,6 +113,10 @@ a{{color:#2980b9}} ul{{columns:2;font-size:14px}}
 
 
 def git_push() -> tuple[bool, str]:
+    import os
+
+    os.environ.setdefault("GIT_EDITOR", "true")  # rebase --continue 非交互
+
     def run(*cmd: str) -> subprocess.CompletedProcess:
         return subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
                               encoding="utf-8", errors="replace")
@@ -124,14 +128,16 @@ def git_push() -> tuple[bool, str]:
 
     commit_if_any()
     push = run("git", "push")
-    if push.returncode != 0 and "rejected" in (push.stdout + push.stderr):
-        # 远端有新提交（多为 Actions 重建），rebase 后再推
-        pull = run("git", "pull", "--rebase", "--autostash")
+    if push.returncode != 0 and ("rejected" in (push.stdout + push.stderr)
+                                 or "fetch first" in (push.stdout + push.stderr)):
+        # 远端有新提交：rebase，-X theirs 使生成的报表/图表冲突时以本次新生成的为准
+        pull = run("git", "pull", "--rebase", "-X", "theirs", "--autostash")
         if pull.returncode != 0:
-            return False, f"拉取远端失败：{(pull.stdout + pull.stderr).strip()[:300]}"
-        commit_if_any()
+            run("git", "rebase", "--abort")
+            commit_if_any()
         push = run("git", "push")
     if push.returncode != 0:
+        run("git", "rebase", "--abort")
         return False, f"推送失败：{(push.stderr or push.stdout).strip()[:300]}"
     return True, "已提交并推送 GitHub"
 
