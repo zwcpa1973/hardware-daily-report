@@ -20,7 +20,7 @@ items:
     chip: Apple M4
     model: Mac mini M4 16G+512G
     keyword: "Mac mini M4 16G 512G"
-    must_include: ["Mac mini"]
+    must_include: ["mac mini", "512"]
     price_range: [3500, 12000]
 
   - id: beelink_ser9
@@ -63,7 +63,7 @@ items:
     chip: Apple M4
     model: MacBook Air 13 M4 16G+256G
     keyword: "MacBook Air M4 16G 256G"
-    must_include: ["MacBook Air"]
+    must_include: ["macbook air", "256"]
     price_range: [6000, 13000]
 
   - id: legion_y7000p

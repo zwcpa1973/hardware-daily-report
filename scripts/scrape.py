@@ -201,17 +201,28 @@ JS_TAOBAO_PC = r"""
   const anchors = document.querySelectorAll(
     'a[href*="item.taobao.com"], a[href*="detail.tmall.com"], a[href*="chaoshi.detail.tmall.com"]');
   anchors.forEach(a => {
-    const card = a.closest('div[class*="Card"], div[class*="card"], div[class*="Content"], li, section') || a.parentElement;
+    // 从锚点向上找"最小的含价格容器"作为商品卡片
+    let el = a, card = null;
+    for (let i = 0; i < 8 && el; i++) {
+      el = el.parentElement;
+      if (!el) break;
+      const t = el.textContent || '';
+      if (/¥\s*[0-9]/.test(t) && t.length < 800) { card = el; break; }
+    }
     if (!card) return;
-    const txt = (card.textContent || '').replace(/\s+/g, ' ');
-    const m = txt.match(/¥\s*([0-9][0-9,]*\.?[0-9]*)/);
-    if (!m) return;
-    const price = parseFloat(m[1].replace(/,/g, ''));
+    // 从专用价格元素取价（避免价格与销量数字粘连成 4599200 之类）
+    let price = NaN;
+    for (const pe of card.querySelectorAll('[class*="price" i]')) {
+      const t = (pe.textContent || '').replace(/[,\s]/g, '');
+      const m = t.match(/¥?([0-9]{2,7}(?:\.[0-9]{1,2})?)$/);
+      if (m && t.length <= 12) { price = parseFloat(m[1]); break; }
+    }
     if (!isFinite(price) || price <= 0) return;
-    let title = (a.getAttribute('aria-label') || a.title || a.textContent || '').replace(/\s+/g, ' ').trim();
+    let title = '';
+    const tEl = card.querySelector('[class*="title" i]');
+    if (tEl) title = (tEl.textContent || '').replace(/\s+/g, ' ').trim();
     if (title.length < 8) {
-      const tEl = card.querySelector('[class*="title" i], [class*="Title" i]');
-      title = tEl ? (tEl.textContent || '').replace(/\s+/g, ' ').trim() : title;
+      title = (a.getAttribute('aria-label') || a.title || a.textContent || '').replace(/\s+/g, ' ').trim();
     }
     if (!title || title.length < 8) return;
     const key = title.slice(0, 60) + '|' + price;
@@ -224,7 +235,7 @@ JS_TAOBAO_PC = r"""
       price: price,
       url: url,
       shop: '',
-      self_op: /天猫|官方|旗舰店/.test(txt),
+      self_op: /天猫|官方|旗舰店/.test(card.textContent || ''),
     });
   });
   return out.slice(0, 40);
@@ -249,6 +260,8 @@ def search_taobao(page, keyword: str, item_id: str) -> list[dict]:
                 body = page.inner_text("body")[:3000]
             except Exception:
                 pass
+            if "亲，请登录" in body:
+                raise SessionExpired("淘宝会话未生效（页面显示未登录）")
             if any(k in body for k in ("访问受限", "亲，太抱歉", "验证码", "安全验证")):
                 raise RateLimited("淘宝风控拦截（需人工验证）")
         return cands
@@ -268,8 +281,10 @@ def _urlencode(s: str) -> str:
 
 def pick_candidate(cands: list[dict], item: dict) -> dict | None:
     """按规则挑出目标商品：标题关键词命中 + 价格区间 + 优先自营 + 取最低价。"""
+    # 全局排除：二手/翻新/扩容/水货等不可比商品
+    global_excludes = ["二手", "翻新", "扩容", "官换", "港版", "韩版", "回收", "准新"]
     must = [m.lower() for m in item.get("must_include", [])]
-    excl = [m.lower() for m in item.get("exclude", [])]
+    excl = [m.lower() for m in item.get("exclude", [])] + global_excludes
     lo, hi = item.get("price_range", [0, 10 ** 9])
     ok = []
     for c in cands:
@@ -303,12 +318,14 @@ JD_PROFILE = AUTH_DIR / "edge_profile_jd"
 TB_PROFILE = AUTH_DIR / "edge_profile_taobao"
 
 
-def start_native(pw, profile: Path):
+def start_native(pw, profile: Path, state_path: Path | None = None):
     """原生启动 Edge（指定登录档案），返回 (proc, ctx)；失败返回 (proc, None)。
 
     京东/淘宝的风控都会拦截"无头/自动化浏览器"的搜索（即使携带有效登录
     Cookie），但对真实 Edge 窗口放行，因此抓取必须在原生浏览器中进行，
     Python 仅通过 CDP 读取页面数据。
+    若提供 state_path（登录时导出的 storage_state），会将会话 Cookie 注入
+    浏览器——即使档案未及时落盘也能保证会话新鲜。
     """
     from login import find_browser, free_port, kill_stale_edge
 
@@ -326,7 +343,17 @@ def start_native(pw, profile: Path):
         try:
             b = pw.chromium.connect_over_cdp(f"http://127.0.0.1:{port}", timeout=3000)
             if b.contexts:
-                return proc, b.contexts[0]
+                ctx = b.contexts[0]
+                if state_path and Path(state_path).exists():
+                    try:
+                        state = json.loads(Path(state_path).read_text(encoding="utf-8"))
+                        cookies = state.get("cookies", [])
+                        if cookies:
+                            ctx.add_cookies(cookies)
+                            log(f"    已注入登录会话（{len(cookies)} 条 Cookie）")
+                    except Exception as exc:
+                        log(f"    会话注入失败（改用档案自带 Cookie）：{exc}")
+                return proc, ctx
         except Exception:
             continue
     return proc, None
@@ -363,7 +390,7 @@ def main() -> int:
                     status["jd"] = "missing_login"
                     jd_ok = False
                 else:
-                    jd_proc, jd_ctx = start_native(pw, JD_PROFILE)
+                    jd_proc, jd_ctx = start_native(pw, JD_PROFILE, AUTH_DIR / "jd_state.json")
                     if jd_ctx is None:
                         log("!! 京东浏览器启动/连接失败")
                         status["jd"] = "start_failed"
@@ -376,7 +403,7 @@ def main() -> int:
                     status["taobao"] = "missing_login"
                     tb_ok = False
                 else:
-                    tb_proc, tb_ctx = start_native(pw, TB_PROFILE)
+                    tb_proc, tb_ctx = start_native(pw, TB_PROFILE, AUTH_DIR / "taobao_state.json")
                     if tb_ctx is None:
                         log("!! 淘宝浏览器启动/连接失败")
                         status["taobao"] = "start_failed"
