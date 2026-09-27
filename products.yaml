@@ -31,6 +31,7 @@ items:
     model: 零刻 SER9 迷你主机
     keyword: "零刻 SER9"
     must_include: ["零刻", "SER9"]
+    exclude: ["准系统", "Max"]
     price_range: [2500, 9999]
 
   - id: gmktec_k8_plus

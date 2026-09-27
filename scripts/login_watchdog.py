@@ -21,7 +21,7 @@ STATE_FILES = {
     "jd": AUTH_DIR / "jd_state.json",
     "taobao": AUTH_DIR / "taobao_state.json",
 }
-ATTEMPT_TIMEOUT = 330  # 单次尝试的硬超时（秒），防止驱动卡死拖住整体
+ATTEMPT_TIMEOUT = 660  # 单次尝试的硬超时（秒），需大于 login.py 的 WAIT_SECONDS
 
 
 def main() -> int:

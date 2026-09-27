@@ -91,15 +91,34 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据
+### 最新数据（2026-09-27，累计 1 天）
 
-暂无数据。请先运行 `python scripts/login.py` 完成登录，再运行 `run_daily.bat` 开始采集。
-图表占位：`output/charts/`（首次采集后自动生成）
-### 走势图
+#### 整机（迷你主机 / 笔记本 / 台式机）
+
+| 商品 | 芯片 | 京东 | 淘宝 |
+|---|---|---|---|
+| [零刻 SER9 迷你主机](https://item.jd.com/10218448974737.html) | AMD 锐龙 | ¥3399 | — |
+| [极摩客 K8 Plus 迷你主机](https://item.jd.com/10117296510123.html) | AMD 锐龙 | ¥2299 | — |
+| [Mac mini M4 16G+512G](https://item.jd.com/100391549686.html) | Apple M4 | ¥5694 | — |
+
+#### DDR5 内存
+
+| 商品 | 芯片 | 京东 | 淘宝 |
+|---|---|---|---|
+
+#### iQOO Neo 手机
+
+| 商品 | 芯片 | 京东 | 淘宝 |
+|---|---|---|---|
+
+### 报价走势图
 
 ![整机](output/charts/chart_machines.png)
 
-![DDR5](output/charts/chart_ddr5.png)
+![DDR5 内存](output/charts/chart_ddr5.png)
 
-![Neo](output/charts/chart_neo.png)
+![iQOO Neo](output/charts/chart_neo.png)
+
+> 更新时间：2026-09-27 11:29（本地任务自动推送）
+
 <!-- AUTO:END -->

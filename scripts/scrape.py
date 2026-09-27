@@ -34,10 +34,38 @@ UA_PC = (
 JS_JD_PC = r"""
 () => {
   const out = [];
+  const seen = new Set();
+  // 2026 新版搜索页：div[data-sku] 商品卡片
+  document.querySelectorAll('div[data-sku]').forEach(card => {
+    if (!/plugin_goodsCardWrapper/.test(card.className || '')) return;
+    const sku = card.getAttribute('data-sku');
+    if (!sku || seen.has(sku)) return;
+    const t1 = card.querySelector('[class*="_goods_title_container"]');
+    const t2 = card.querySelector('[title]');
+    const c1 = t1 ? (t1.textContent || '').replace(/\s+/g, ' ').trim() : '';
+    const c2 = t2 ? (t2.getAttribute('title') || '').replace(/\s+/g, ' ').trim() : '';
+    const title = c2.length > c1.length ? c2 : c1;
+    if (!title) return;
+    let price = NaN;
+    for (const pe of card.querySelectorAll('[class*="_price_"]')) {
+      const m = (pe.textContent || '').replace(/,/g, '').match(/([0-9]+(?:\.[0-9]+)?)/);
+      if (m) { price = parseFloat(m[1]); break; }
+    }
+    if (!isFinite(price) || price <= 0) return;
+    seen.add(sku);
+    out.push({
+      title: title.slice(0, 200),
+      price: price,
+      url: 'https://item.jd.com/' + sku + '.html',
+      shop: '',
+      self_op: /自营|官方旗舰店|京东超市/.test(card.textContent || ''),
+    });
+  });
+  if (out.length) return out;
+  // 旧版搜索页兜底
   document.querySelectorAll('li.gl-item, #J_goodsList li').forEach(li => {
     const a = li.querySelector('.p-name a, a[href*="item.jd.com"]');
     const priceEl = li.querySelector('.p-price i, .p-price strong i');
-    const shopEl = li.querySelector('.p-shop a');
     const title = a ? (a.getAttribute('title') || a.textContent || '') : '';
     const price = priceEl ? parseFloat((priceEl.textContent || '').replace(/[^0-9.]/g, '')) : NaN;
     if (!title || !isFinite(price)) return;
@@ -45,7 +73,7 @@ JS_JD_PC = r"""
       title: title.trim().slice(0, 200),
       price: price,
       url: a ? a.href : '',
-      shop: shopEl ? (shopEl.textContent || '').trim() : '',
+      shop: '',
       self_op: /自营/.test(li.textContent || ''),
     });
   });

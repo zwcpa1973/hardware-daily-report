@@ -1,15 +1,17 @@
 @echo off
-rem 双击登录京东：弹出窗口后，用京东 App 扫码并在手机上点「确认登录」即可
-chcp 65001 >nul
-cd /d "%~dp0"
+rem ˫����¼�������������ں��þ��� App ɨ�룬�����ֻ��ϵ㡸ȷ�ϵ�¼��
+cd /d "W:\codexplaceoffice\����\Ӳ���ձ�" 2>nul
+if not exist scripts\login_watchdog.py pushd "\\DESKTOP-ULL4GFD\office-D\codexplaceoffice\����\Ӳ���ձ�"
 set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
-echo 正在打开登录窗口（总时长 20 分钟，二维码自动保持有效，可随时扫）……
-echo 登录成功后所有窗口会自动关闭。
+title ������¼ - Ӳ���ձ�
+echo ���ڴ򿪵�¼���ڣ���ʱ�� 20 ���ӣ�����ʱɨ�룬��ά�벻����ڡ���
+echo ��¼�ɹ������д��ڻ��Զ��رգ�����ʾ DONE��
+echo.
 py -3.10 scripts\login_watchdog.py jd 20
 echo.
 echo ================================
-echo 登录流程结束。若上方显示 DONE，说明登录态已保存，
-echo 之后每天 17:00 硬件日报会自动使用，无需再登录（约 1 个月有效）。
+echo ���Ϸ���ʾ DONE��˵����¼̬�ѱ���ɹ���
+echo ֮��ÿ�� 17:00 Ӳ���ձ��Զ����У������ٵ�¼��
 echo ================================
 pause
