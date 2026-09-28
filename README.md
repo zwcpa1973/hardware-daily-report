@@ -91,37 +91,29 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-09-27，累计 1 天）
+### 最新数据（2026-09-28，累计 2 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1083025922402) | AMD 锐龙 | — | ¥10763 |
-| [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
-| [零刻 SER9 迷你主机](https://item.jd.com/10218448974737.html) | AMD 锐龙 | ¥3399 | ¥3199 |
-| [极摩客 K8 Plus 迷你主机](https://item.jd.com/10117296510123.html) | AMD 锐龙 | ¥2299 | ¥2249 |
-| [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=741939428833) | Intel 酷睿 | — | ¥11299 |
-| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=739637983718) | Intel 酷睿 | — | ¥6588 |
-| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=730730866062) | Intel 酷睿 | — | ¥4199 |
-| [Mac mini M4 16G+512G](https://item.jd.com/100391549686.html) | Apple M4 | ¥5694 | ¥6999 |
-| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=829206968366) | Intel 酷睿 Ultra | — | ¥2599 |
+| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1031739777452) | AMD 锐龙 | — | ¥10799 |
+| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=969071783195) | AMD 锐龙 | — | ¥4099 |
+| [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=963343280589) | AMD 锐龙 | — | ¥2099 |
+| [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=669118246322) | Intel 酷睿 | — | ¥11099 |
+| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=742600155622) | Intel 酷睿 | — | ¥12799 |
+| [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=894338294249) | Apple M4 | — | ¥5998 |
+| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=1072481273097) | Intel 酷睿 Ultra | — | ¥2699 |
 
 #### DDR5 内存
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1037072509466) | DDR5 | — | ¥1199 |
-| [金百达 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=705179870946) | DDR5 | — | ¥1675 |
-| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1057812476554) | DDR5 | — | ¥1286 |
 
 #### iQOO Neo 手机
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [iQOO Neo10 12+256](https://item.taobao.com/item.htm?id=1082473546169) | 骁龙8 Gen3 | — | ¥1805 |
-| [iQOO Neo10 Pro 12+256](https://item.taobao.com/item.htm?id=1065756972557) | 天玑9400 | — | ¥2316 |
-| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1060488974939) | 骁龙8 至尊版 | — | ¥2643 |
 
 ### 报价走势图
 
@@ -131,6 +123,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-09-27 17:37（本地任务自动推送）
+> 更新时间：2026-09-28 17:19（本地任务自动推送）
 
 <!-- AUTO:END -->
