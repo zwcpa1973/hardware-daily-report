@@ -91,19 +91,16 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-09-28，累计 2 天）
+### 最新数据（2026-09-29，累计 3 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1031739777452) | AMD 锐龙 | — | ¥10799 |
-| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=969071783195) | AMD 锐龙 | — | ¥4099 |
+| [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
+| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=836605543887) | AMD 锐龙 | — | ¥7699 |
 | [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=963343280589) | AMD 锐龙 | — | ¥2099 |
-| [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=669118246322) | Intel 酷睿 | — | ¥11099 |
-| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=742600155622) | Intel 酷睿 | — | ¥12799 |
-| [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=894338294249) | Apple M4 | — | ¥5998 |
-| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=1072481273097) | Intel 酷睿 Ultra | — | ¥2699 |
+| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=768375272625) | Intel 酷睿 | — | ¥9999 |
 
 #### DDR5 内存
 
@@ -123,6 +120,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-09-28 17:19（本地任务自动推送）
+> 更新时间：2026-09-29 17:20（本地任务自动推送）
 
 <!-- AUTO:END -->
