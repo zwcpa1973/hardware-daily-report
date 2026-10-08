@@ -91,26 +91,37 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-09-29，累计 3 天）
+### 最新数据（2026-10-08，累计 4 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
+| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1053877750477) | AMD 锐龙 | — | ¥10499 |
+| [华硕天选X 台式机](https://item.taobao.com/item.htm?id=716844669486) | AMD 锐龙 | — | ¥8299 |
 | [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=836605543887) | AMD 锐龙 | — | ¥7699 |
-| [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=963343280589) | AMD 锐龙 | — | ¥2099 |
-| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=768375272625) | Intel 酷睿 | — | ¥9999 |
+| [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=962816220620) | AMD 锐龙 | — | ¥2099 |
+| [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=1055954127161) | Intel 酷睿 | — | ¥6027 |
+| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=739637983718) | Intel 酷睿 | — | ¥6588 |
+| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=1086704966508) | Intel 酷睿 | — | ¥6235 |
+| [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=894338294249) | Apple M4 | — | ¥5998 |
+| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=829206968366) | Intel 酷睿 Ultra | — | ¥2599 |
 
 #### DDR5 内存
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1028027708275) | DDR5 | — | ¥1339 |
+| [金百达 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=723650944389) | DDR5 | — | ¥1428 |
+| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1057812476554) | DDR5 | — | ¥1421 |
 
 #### iQOO Neo 手机
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [iQOO Neo10 12+256](https://item.taobao.com/item.htm?id=992817703916) | 骁龙8 Gen3 | — | ¥1946 |
+| [iQOO Neo10 Pro 12+256](https://item.taobao.com/item.htm?id=1073808629057) | 天玑9400 | — | ¥2065 |
+| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1050581697866) | 骁龙8 至尊版 | — | ¥1828 |
 
 ### 报价走势图
 
@@ -120,6 +131,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-10-08 08:26（本地任务自动推送）
+> 更新时间：2026-10-08 17:23（本地任务自动推送）
 
 <!-- AUTO:END -->
