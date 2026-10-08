@@ -1,12 +1,12 @@
 @echo off
-rem Ó²¼þÈÕ±¨Ã¿ÈÕÈÎÎñÈë¿Ú£¨¼Æ»®ÈÎÎñ 17:00 µ÷ÓÃ£¬Ê¹ÓÃ Python 3.10£©
-rem pushd ¼æÈÝÍøÂçÅÌ/UNC Â·¾¶
+rem ç¡¬ä»¶æ—¥æŠ¥æ¯æ—¥ä»»åŠ¡å…¥å£ï¼ˆè®¡åˆ’ä»»åŠ¡ 17:00 è°ƒç”¨ï¼Œä½¿ç”¨ Python 3.10ï¼‰
+rem pushd å…¼å®¹ç½‘ç»œç›˜/UNC è·¯å¾„
 pushd "%~dp0" || exit /b 1
 set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
 if not exist output mkdir output
 echo ================================ >> output\daily_log.txt
-echo %date% %time% ¿ªÊ¼ >> output\daily_log.txt
+echo %date% %time% å¼€å§‹ >> output\daily_log.txt
 py -3.10 scripts\run_daily.py >> output\daily_log.txt 2>&1
-echo %date% %time% ½áÊø >> output\daily_log.txt
+echo %date% %time% ç»“æŸ >> output\daily_log.txt
 popd
