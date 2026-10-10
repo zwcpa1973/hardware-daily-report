@@ -91,24 +91,37 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-10-09，累计 5 天）
+### 最新数据（2026-10-10，累计 6 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=836605543887) | AMD 锐龙 | — | ¥7199 |
+| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1081901971364) | AMD 锐龙 | — | ¥10199 |
+| [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
+| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=1088590883416) | AMD 锐龙 | — | ¥3999 |
 | [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=767832632281) | AMD 锐龙 | — | ¥2149 |
+| [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=1090477961914) | Intel 酷睿 | — | ¥6587 |
+| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=1076040126271) | Intel 酷睿 | — | ¥6629 |
+| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=1086704966508) | Intel 酷睿 | — | ¥5735 |
+| [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=1077576266882) | Apple M4 | — | ¥7299 |
+| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=1022070685384) | Intel 酷睿 Ultra | — | ¥2857 |
 
 #### DDR5 内存
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=980304233921) | DDR5 | — | ¥1339 |
+| [金百达 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=723154938954) | DDR5 | — | ¥739 |
+| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=666442397541) | DDR5 | — | ¥1589 |
 
 #### iQOO Neo 手机
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [iQOO Neo10 12+256](https://item.taobao.com/item.htm?id=1065907997157) | 骁龙8 Gen3 | — | ¥1870 |
+| [iQOO Neo10 Pro 12+256](https://item.taobao.com/item.htm?id=1073808629057) | 天玑9400 | — | ¥2065 |
+| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1060488974939) | 骁龙8 至尊版 | — | ¥2643 |
 
 ### 报价走势图
 
@@ -118,6 +131,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-10-09 17:14（本地任务自动推送）
+> 更新时间：2026-10-10 17:21（本地任务自动推送）
 
 <!-- AUTO:END -->
