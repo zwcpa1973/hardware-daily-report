@@ -1,7 +1,73 @@
 {
-  "date": "2026-10-12",
-  "results": {},
-  "fatal": "BrowserContext.new_page: Target page, context or browser has been closed",
-  "fetched_at": "2026-10-12 17:00:27",
-  "rows_today": 0
+  "date": "2026-10-13",
+  "results": {
+    "mac_mini_m4_512": {
+      "jd": null,
+      "taobao": null
+    },
+    "beelink_ser9": {
+      "jd": null,
+      "taobao": 3999
+    },
+    "gmktec_k8_plus": {
+      "jd": null,
+      "taobao": 2099
+    },
+    "minisforum_nuc5": {
+      "jd": null,
+      "taobao": 2598.7
+    },
+    "macbook_air_m4": {
+      "jd": null,
+      "taobao": null
+    },
+    "legion_y7000p": {
+      "jd": null,
+      "taobao": 12999
+    },
+    "asus_tianxuan_pro": {
+      "jd": null,
+      "taobao": 9999
+    },
+    "legion_blade_7000k": {
+      "jd": null,
+      "taobao": 9899
+    },
+    "asus_tianxuan_x": {
+      "jd": null,
+      "taobao": 5899
+    },
+    "lenovo_geekpro": {
+      "jd": null,
+      "taobao": 6999
+    },
+    "kingbank_ddr5_6000_16x2": {
+      "jd": null,
+      "taobao": 739
+    },
+    "gloway_ddr5_6000_16x2": {
+      "jd": null,
+      "taobao": 849
+    },
+    "kingston_ddr5_6000_16x2": {
+      "jd": null,
+      "taobao": 1421.1
+    },
+    "iqoo_neo10": {
+      "jd": null,
+      "taobao": 1805
+    },
+    "iqoo_neo10_pro": {
+      "jd": null,
+      "taobao": 1870
+    },
+    "iqoo_neo11": {
+      "jd": null,
+      "taobao": 2499
+    }
+  },
+  "jd": "no_hits",
+  "taobao": "ok",
+  "fetched_at": "2026-10-13 17:26:21",
+  "rows_today": 14
 }
