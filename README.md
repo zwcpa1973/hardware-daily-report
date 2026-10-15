@@ -91,19 +91,19 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-10-14，累计 9 天）
+### 最新数据（2026-10-15，累计 10 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1053877750477) | AMD 锐龙 | — | ¥10499 |
+| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1085442796484) | AMD 锐龙 | — | ¥9899 |
 | [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
 | [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=1088590883416) | AMD 锐龙 | — | ¥3999 |
 | [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=963343280589) | AMD 锐龙 | — | ¥2099 |
 | [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=669118246322) | Intel 酷睿 | — | ¥11099 |
-| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=843017056323) | Intel 酷睿 | — | ¥12235 |
-| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=768375272625) | Intel 酷睿 | — | ¥9299 |
+| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=765586824714) | Intel 酷睿 | — | ¥6549 |
+| [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=730730866062) | Intel 酷睿 | — | ¥4199 |
 | [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=1077576266882) | Apple M4 | — | ¥7299 |
 | [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=829206968366) | Intel 酷睿 Ultra | — | ¥2599 |
 
@@ -111,11 +111,17 @@ scripts/                 全部脚本
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=980304233921) | DDR5 | — | ¥1299 |
+| [金百达 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=723154938954) | DDR5 | — | ¥739 |
+| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1057812476554) | DDR5 | — | ¥1574 |
 
 #### iQOO Neo 手机
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
+| [iQOO Neo10 12+256](https://item.taobao.com/item.htm?id=1064243706536) | 骁龙8 Gen3 | — | ¥1849 |
+| [iQOO Neo10 Pro 12+256](https://item.taobao.com/item.htm?id=1081176189870) | 天玑9400 | — | ¥1870 |
+| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1053204636171) | 骁龙8 至尊版 | — | ¥2499 |
 
 ### 报价走势图
 
@@ -125,6 +131,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-10-14 17:19（本地任务自动推送）
+> 更新时间：2026-10-15 17:20（本地任务自动推送）
 
 <!-- AUTO:END -->
