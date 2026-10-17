@@ -91,29 +91,28 @@ scripts/                 全部脚本
 ```
 
 <!-- AUTO:BEGIN -->
-### 最新数据（2026-10-16，累计 11 天）
+### 最新数据（2026-10-17，累计 12 天）
 
 #### 整机（迷你主机 / 笔记本 / 台式机）
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1053877750477) | AMD 锐龙 | — | ¥10499 |
+| [华硕天选 Pro 锐龙版](https://item.taobao.com/item.htm?id=1081099990702) | AMD 锐龙 | — | ¥11999 |
 | [华硕天选X 台式机](https://item.taobao.com/item.htm?id=729493708668) | AMD 锐龙 | — | ¥5899 |
-| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=969071783195) | AMD 锐龙 | — | ¥4099 |
+| [零刻 SER9 迷你主机](https://item.taobao.com/item.htm?id=1032096828830) | AMD 锐龙 | — | ¥5299 |
 | [极摩客 K8 Plus 迷你主机](https://item.taobao.com/item.htm?id=962816220620) | AMD 锐龙 | — | ¥2099 |
 | [拯救者刃 7000K 主机](https://item.taobao.com/item.htm?id=669118246322) | Intel 酷睿 | — | ¥11099 |
-| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=1074925503140) | Intel 酷睿 | — | ¥12899 |
+| [拯救者 Y7000P 游戏本](https://item.taobao.com/item.htm?id=765586824714) | Intel 酷睿 | — | ¥6549 |
 | [联想 GeekPro 台式机](https://item.taobao.com/item.htm?id=730730866062) | Intel 酷睿 | — | ¥4199 |
-| [Mac mini M4 16G+512G](https://item.taobao.com/item.htm?id=1077576266882) | Apple M4 | — | ¥7299 |
-| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=829206968366) | Intel 酷睿 Ultra | — | ¥2599 |
+| [铭凡 NUC 迷你主机](https://item.taobao.com/item.htm?id=1001678652552) | Intel 酷睿 Ultra | — | ¥2999 |
 
 #### DDR5 内存
 
 | 商品 | 芯片 | 京东 | 淘宝 |
 |---|---|---|---|
-| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1020467610081) | DDR5 | — | ¥849 |
+| [光威 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1037072509466) | DDR5 | — | ¥1249 |
 | [金百达 DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=723154938954) | DDR5 | — | ¥739 |
-| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=1057812476554) | DDR5 | — | ¥1286 |
+| [金士顿 Fury DDR5 6000 16G×2](https://item.taobao.com/item.htm?id=666442397541) | DDR5 | — | ¥1959 |
 
 #### iQOO Neo 手机
 
@@ -121,7 +120,7 @@ scripts/                 全部脚本
 |---|---|---|---|
 | [iQOO Neo10 12+256](https://item.taobao.com/item.htm?id=981890368168) | 骁龙8 Gen3 | — | ¥1780 |
 | [iQOO Neo10 Pro 12+256](https://item.taobao.com/item.htm?id=1081176189870) | 天玑9400 | — | ¥1870 |
-| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1051332178457) | 骁龙8 至尊版 | — | ¥2499 |
+| [iQOO Neo11 12+256](https://item.taobao.com/item.htm?id=1053206412251) | 骁龙8 至尊版 | — | ¥2359 |
 
 ### 报价走势图
 
@@ -131,6 +130,6 @@ scripts/                 全部脚本
 
 ![iQOO Neo](output/charts/chart_neo.png)
 
-> 更新时间：2026-10-16 17:20（本地任务自动推送）
+> 更新时间：2026-10-17 17:15（本地任务自动推送）
 
 <!-- AUTO:END -->
