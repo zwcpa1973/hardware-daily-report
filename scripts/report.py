@@ -50,20 +50,23 @@ def _placeholder(plt, path: Path, text: str) -> None:
 
 
 def _plot_lines(ax, series: dict[str, dict[str, float]], dates: list[str]) -> None:
-    """series: model -> {date: price}"""
+    """series: model -> {date: price}
+
+    x 用日期在 dates 中的序号（不能用日期字符串——matplotlib 字符串分类轴按
+    各系列"首次出现"分配槽位，系列间日期集合不同时槽位会错乱，画出来是乱麻）。
+    缺数据的日期填 None，matplotlib 自动断线，不再跨缺口直连。
+    """
     colors = ["#c0392b", "#2980b9", "#27ae60", "#8e44ad", "#e67e22",
               "#16a085", "#d35400", "#2c3e50", "#7f8c8d", "#f39c12"]
+    xs = list(range(len(dates)))
     for i, (model, points) in enumerate(series.items()):
-        xs, ys = [], []
-        for d in dates:
-            if d in points:
-                xs.append(d)
-                ys.append(points[d])
-        if not xs:
+        ys = [points.get(d) for d in dates]
+        if all(y is None for y in ys):
             continue
         c = colors[i % len(colors)]
         ax.plot(xs, ys, marker="o", markersize=4, linewidth=1.8, label=model, color=c)
-        ax.annotate(f"{ys[-1]:.0f}", (xs[-1], ys[-1]),
+        last = max(j for j, y in enumerate(ys) if y is not None)
+        ax.annotate(f"{ys[last]:.0f}", (xs[last], ys[last]),
                     textcoords="offset points", xytext=(6, 4),
                     fontsize=8, color=c)
     ax.grid(True, linestyle="--", alpha=0.35)
