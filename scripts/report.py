@@ -70,26 +70,28 @@ def _plot_lines(ax, series: dict[str, dict[str, float]], dates: list[str]) -> No
     ax.legend(fontsize=8, loc="best")
 
 
-def build_charts(only_jd: bool = True) -> dict[str, Path]:
+def build_charts(only_jd: bool = False) -> dict[str, Path]:
     plt = _setup_font()
     ensure_dirs()
     rows = read_all_rows()
     items = {it["id"]: it for it in load_items()}
 
-    if only_jd and rows:
-        # 同时抓到京东与淘宝时，图表用京东价为主（口径统一），表格里两个平台都展示
-        rows = [r for r in rows if r["platform"] == "京东"] or rows
-
     dates = sorted({r["date"] for r in rows})
     tick = max(1, len(dates) // 8)  # 日期标签过密时抽稀
 
     def series_for(ids: list[str]) -> dict[str, dict[str, float]]:
+        # 京东与淘宝各画一条线：京东用商品名，淘宝加"（淘宝）"后缀
         out: dict[str, dict[str, float]] = {}
         for iid in ids:
-            pts = {r["date"]: float(r["price"]) for r in rows if r["item_id"] == iid}
-            if pts:
-                model = items.get(iid, {}).get("model", iid)
-                out[model] = pts
+            model = items.get(iid, {}).get("model", iid)
+            pts_jd = {r["date"]: float(r["price"]) for r in rows
+                      if r["item_id"] == iid and r["platform"] == "京东"}
+            pts_tb = {r["date"]: float(r["price"]) for r in rows
+                      if r["item_id"] == iid and r["platform"] == "淘宝"}
+            if pts_jd:
+                out[model] = pts_jd
+            if pts_tb:
+                out[f"{model}（淘宝）"] = pts_tb
         return out
 
     paths: dict[str, Path] = {}

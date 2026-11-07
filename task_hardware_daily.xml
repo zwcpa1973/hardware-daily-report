@@ -19,8 +19,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>W:\codexplaceoffice\其他\硬件日报\run_daily.bat</Command>
-      <WorkingDirectory>W:\codexplaceoffice\其他\硬件日报</WorkingDirectory>
+      <Command>F:\codexplaceoffice\其他\硬件日报\run_daily.bat</Command>
+      <WorkingDirectory>F:\codexplaceoffice\其他\硬件日报</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>

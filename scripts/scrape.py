@@ -186,8 +186,8 @@ def search_jd(page, keyword: str, item_id: str) -> list[dict]:
             return []
         gentle_scroll(page, times=4)
         return page.evaluate(JS_GENERIC_MOBILE)
-    except RateLimited:
-        raise  # 频控必须交给上层做退避重试，不能在这里吞掉
+    except (RateLimited, SessionExpired):
+        raise  # 频控/登录失效必须交给上层处理（退避重试或跳过剩余商品），不能吞掉
     except Exception as exc:
         dump_debug(page, f"jd_{item_id}")
         log(f"    京东搜索异常：{exc}")
